@@ -1,0 +1,175 @@
+apply plugin: 'com.android.model.application'
+
+def rtmpNativeSDK = "$projectDir/../../RTMPSDK"
+def rtmpNativeSDKLib = "$projectDir/../../RTMPSDK/Platform/Android/lib"
+def rtmpNativeDefmainVer = 0
+def rtmpNativeDefsubVer = 0
+def rtmpNativeDefbuildNum = 0
+def rtmpNativeDefenableCheckDns = 0
+
+model {
+
+    android {
+        compileSdkVersion = 21
+        buildToolsVersion = "21.1.2"
+
+        defaultConfig {
+            applicationId = "com.tencent.rtmp.demo"
+            minSdkVersion.apiLevel = 17
+            targetSdkVersion.apiLevel = 21
+            versionCode = 1
+            versionName = "1.0"
+        }
+    }
+
+    android.buildTypes {
+        release {
+            minifyEnabled = false
+            proguardFiles.add(file('proguard-rules.pro'))
+        }
+    }
+
+    android.sources {
+        main {
+            java {
+                source {
+                    srcDir "src/main/java"
+                    srcDir "../SDK/library/src/main/java"
+                }
+            }
+
+            jni {
+                source {
+                    srcDir "$rtmpNativeSDK"
+                    exclude "**/Hd264Dec.cpp"
+                    exclude "**/Hd264Enc.cpp"
+                    exclude "**/H264Dec.cpp"
+                    exclude "**/H264Enc.cpp"
+                    exclude "**/ios/**"
+                    exclude "**/gles2/**"
+                    exclude "**/ijksdl_egl.c"
+                    exclude "**/xplatform/**"
+                    exclude "**/RTMPJitterQueueMgr.cpp"
+                    exclude "**/RTMPJitterQueueThread.cpp"
+                    exclude "**/VODJitterQueueThread.cpp"
+                    exclude "**/VODJitterBufferThread.cpp"
+                    exclude "**/RTMPSDK.cpp"
+                }
+
+                dependencies {
+                    library "skinBeauty" linkage "static"
+                    library "fdk_aac" linkage "static"
+                    library "x264" linkage "static"
+                    library "avformat" linkage "static"
+                    library "avcodec" linkage "static"
+                    library "avfilter" linkage "static"
+                    library "avutil" linkage "static"
+                    library "swresample" linkage "static"
+                    library "swscale" linkage "static"
+                }
+            }
+
+            jniLibs {
+                source { srcDir "libs" }
+            }
+        }
+    }
+
+    repositories {
+        libs(PrebuiltLibraries) {
+            fdk_aac {
+                binaries.withType(StaticLibraryBinary) {
+                    staticLibraryFile = file("$rtmpNativeSDKLib/${targetPlatform.getName()}/libfdk-aac.a")
+                }
+            }
+            skinBeauty {
+                binaries.withType(StaticLibraryBinary) {
+                    staticLibraryFile = file("$rtmpNativeSDKLib/${targetPlatform.getName()}/libSkinBeauty.a")
+                }
+            }
+            avcodec {
+                binaries.withType(StaticLibraryBinary) {
+                    staticLibraryFile = file("$rtmpNativeSDKLib/${targetPlatform.getName()}/libavcodec.a")
+                }
+            }
+            avformat {
+                binaries.withType(StaticLibraryBinary) {
+                    staticLibraryFile = file("$rtmpNativeSDKLib/${targetPlatform.getName()}/libavformat.a")
+                }
+            }
+            avutil {
+                binaries.withType(StaticLibraryBinary) {
+                    staticLibraryFile = file("$rtmpNativeSDKLib/${targetPlatform.getName()}/libavutil.a")
+                }
+            }
+            avfilter {
+                binaries.withType(StaticLibraryBinary) {
+                    staticLibraryFile = file("$rtmpNativeSDKLib/${targetPlatform.getName()}/libavfilter.a")
+                }
+            }
+            swresample {
+                binaries.withType(StaticLibraryBinary) {
+                    staticLibraryFile = file("$rtmpNativeSDKLib/${targetPlatform.getName()}/libswresample.a")
+                }
+            }
+            swscale {
+                binaries.withType(StaticLibraryBinary) {
+                    staticLibraryFile = file("$rtmpNativeSDKLib/${targetPlatform.getName()}/libswscale.a")
+                }
+            }
+            x264 {
+                binaries.withType(StaticLibraryBinary) {
+                    staticLibraryFile = file("$rtmpNativeSDKLib/${targetPlatform.getName()}/libx264.a")
+                }
+            }
+        }
+    }
+
+    android.ndk {
+        moduleName = "txrtmpsdk"
+
+        CFlags.add("-I${file("$rtmpNativeSDK/Util")}".toString())
+        CFlags.add("-I${file("$rtmpNativeSDK/librtmp")}".toString())
+        CFlags.add("-I${file("$rtmpNativeSDK/DataReport")}".toString())
+        CFlags.add("-I${file("$rtmpNativeSDK/ffmpeg/include")}".toString())
+        CFlags.add("-I${file("$rtmpNativeSDK/ijkmedia")}".toString())
+        CFlags.add("-I${file("$rtmpNativeSDK/ijkmedia/ijkj4a")}".toString())
+        CFlags.add("-I${file("$rtmpNativeSDK/libyuv/include")}".toString())
+        cppFlags.add("-I${file("$rtmpNativeSDK/librtmp")}".toString())
+        cppFlags.add("-I${file("$rtmpNativeSDK/SDKWrapper")}".toString())
+        cppFlags.add("-I${file("$rtmpNativeSDK/Util")}".toString())
+        cppFlags.add("-I${file("$rtmpNativeSDK/H264")}".toString())
+        cppFlags.add("-I${file("$rtmpNativeSDK/AAC")}".toString())
+        cppFlags.add("-I${file("$rtmpNativeSDK/DataReport")}".toString())
+        cppFlags.add("-I${file("$rtmpNativeSDK/webrtc")}".toString())
+        cppFlags.add("-I${file("$rtmpNativeSDK/Flv")}".toString())
+        cppFlags.add("-I${file("$rtmpNativeSDK/ffmpeg/include")}".toString())
+        cppFlags.add("-I${file("$rtmpNativeSDK/libyuv/include")}".toString())
+        cppFlags.add("-I${file("$rtmpNativeSDK/ijkmedia")}".toString())
+        cppFlags.add("-I${file("$rtmpNativeSDK/libfdk-aac/include")}".toString())
+        cppFlags.add("-I${file("$rtmpNativeSDK/x264")}".toString())
+        cppFlags.add("-I${file("$rtmpNativeSDK/VideoPreProcessModel")}".toString())
+
+        CFlags.add("-DNO_SSL")
+        CFlags.add("-DNO_CRYPTO")
+        CFlags.add("-std=c99")
+        cppFlags.add("-DSDK_MAIN_VERSION="+rtmpNativeDefmainVer)
+        cppFlags.add("-DSDK_SUB_VERSION="+rtmpNativeDefsubVer)
+        cppFlags.add("-DSDK_BUILD_NUMBER="+rtmpNativeDefbuildNum)
+        cppFlags.add("-DSDK_CHECK_DNS="+rtmpNativeDefenableCheckDns)
+        ldLibs.addAll(["log","android","OpenSLES","z","GLESv2"])
+        abiFilters.add("armeabi")
+        abiFilters.add("armeabi-v7a")
+        abiFilters.add("arm64-v8a")
+        stl "stlport_static"
+    }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile(name:'zxing-1.8.4', ext:'aar')
+    compile(name:'barcodescanner-core-1.8.4', ext:'aar')
+//    compile project(':SDK:library')
+	//导入腾讯云直播SDK jar
+    compile fileTree(dir: 'src/main/jniLibs', include: ['*.jar'])
+}
