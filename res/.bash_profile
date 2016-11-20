@@ -7,7 +7,7 @@ export GRADLE_HOME=/Applications/Android\ Studio\ 2.app/Contents/gradle/gradle-2
 export android_version=21
 export android_build_version=21.1.1
 
-export PATH=$PATH:/usr/local/go/bin:~/tools/bin:~/bin:/usr/local/bin:$ANDROID_SDK/platform-tools:$ANDROID_SDK/tools:$ANDROID_NDK:$ANDROID_SDK/build-tools/android-4.3:$ANDROID_NDK/toolchains/arm-linux-androideabi-4.9/prebuilt/darwin-x86_64/bin:~/Tools/androguard:/opt/minicom/2.2/bin/:$GRADLE_HOME/bin
+export PATH=$PATH:/usr/local/go/bin:~/tools/bin:~/bin:/usr/local/bin:$ANDROID_SDK/platform-tools:$ANDROID_SDK/tools:$ANDROID_NDK:$ANDROID_SDK/build-tools/android-4.3:$ANDROID_NDK/toolchains/arm-linux-androideabi-4.9/prebuilt/darwin-x86_64/bin:$GRADLE_HOME/bin
 alias addr2line='arm-linux-androideabi-addr2line'
 alias objdump='arm-linux-androideabi-objdump'
 ulimit -S -n 1024
